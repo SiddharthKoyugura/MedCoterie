@@ -40,8 +40,8 @@ export default function Form({
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
     const newErrors: typeof errors = {};
-    if (!authorName.trim()) newErrors.authorName = "Name is required.";
-    if (!text.trim()) newErrors.text = `${formName} is required.`;
+    if (!authorName.trim()) newErrors.authorName = "Field should not empty";
+    if (!text.trim()) newErrors.text = `Field should not empty`;
 
     setErrors(newErrors);
 
@@ -53,7 +53,7 @@ export default function Form({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <form onSubmit={onSubmit}>
+      <form>
         <DialogTrigger asChild>
           <Button className="cursor-pointer">{openDialogText}</Button>
         </DialogTrigger>
@@ -97,12 +97,7 @@ export default function Form({
             </DialogClose>
             <Button
               type="submit"
-              // onSubmit={() => {
-              //   setOpen(false);
-              //   if (handleSubmit) {
-              //     handleSubmit();
-              //   }
-              // }}
+              onClick={onSubmit}
             >
               Save changes
             </Button>

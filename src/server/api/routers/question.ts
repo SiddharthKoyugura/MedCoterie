@@ -58,22 +58,41 @@ export const questionRouter = createTRPCRouter({
       };
     }),
 
-    getQuestionById: publicProcedure
-        .input(
-            z.object({ id: z.string() })
-        )
-        .query(async ({ input, ctx }) => {
-            const { id } = input;
-            const question = await ctx.db.question.findUnique({
-                where: {
-                    id
-                },
-                include: {
-                  answers: true
-                }
-            });
+  getQuestionById: publicProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ input, ctx }) => {
+      const { id } = input;
+      const question = await ctx.db.question.findUnique({
+        where: {
+          id,
+        },
+        include: {
+          answers: true,
+        },
+      });
 
-            return question;
-        }),
+      return question;
+    }),
 
+  getQuestionsByTitle: publicProcedure
+    .input(z.object({ text: z.string() }))
+    .query(async ({ input, ctx }) => {
+      const { text } = input;
+      return await ctx.db.question.findMany({
+        where: {
+          text: {
+            contains: text,
+            mode: "insensitive",
+          },
+        },
+        select: {
+          id: true,
+          text: true,
+          authorName: true,
+          createdAt: true,
+          _count: { select: { answers: true } },
+        },
+        orderBy: { createdAt: "desc" },
+      });
+    }),
 });

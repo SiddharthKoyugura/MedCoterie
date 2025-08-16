@@ -13,7 +13,6 @@ import Form from "~/app/_components/Form";
 import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
 
-
 export default function QuestionPage() {
   const router = useRouter();
 
@@ -29,7 +28,7 @@ export default function QuestionPage() {
       setText("");
       setAuthorName("");
 
-      data?.answers.push(answer);
+      data?.answers.unshift(answer);
     },
     onError: () => {
       toast.error("Failed to Submit an answer");
@@ -49,7 +48,9 @@ export default function QuestionPage() {
   return (
     <div className="mx-auto mt-8 w-[90%] space-y-6 text-black">
       <div className="flex justify-end">
-        <Button className="cursor-pointer" onClick={() => router.push("/")}>Back</Button>
+        <Button className="cursor-pointer" onClick={() => router.push("/")}>
+          Back
+        </Button>
       </div>
 
       {/* Question */}
@@ -102,8 +103,20 @@ export default function QuestionPage() {
               collapsible
             >
               <AccordionItem value="item-1">
-                <AccordionTrigger className="cursor-pointer text-sm font-semibold lg:text-lg">
-                  {ans.text.slice(0, 50)}...
+                <AccordionTrigger className="w-full cursor-pointer text-sm font-semibold lg:text-lg">
+                  <div className="flex justify-between w-full">
+                    <div className="">{ans.text.slice(0, 50)}...</div>
+                    <div className="self-end text-right">
+                      <p className="text-sm text-gray-600">
+                        By {ans?.authorName}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        {ans?.createdAt
+                          ? new Date(ans.createdAt).toLocaleString()
+                          : ""}
+                      </p>
+                    </div>
+                  </div>
                 </AccordionTrigger>
                 <AccordionContent>{ans.text}</AccordionContent>
               </AccordionItem>
