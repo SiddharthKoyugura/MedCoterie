@@ -9,6 +9,8 @@ npm run dev
 
 ```
 
+<a href="https://med-coterie.vercel.app/">Click Here</a> to view the deployed-app
+
 # 2. Tech Stack Used
 
 ```
