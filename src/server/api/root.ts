@@ -7,7 +7,7 @@ import { questionRouter } from "./routers/question";
  * All routers added in /api/routers should be manually added here.
  */
 export const appRouter = createTRPCRouter({
-  questions: questionRouter,
+  question: questionRouter,
 });
 
 // export type definition of API
