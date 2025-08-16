@@ -29,16 +29,16 @@ export const questionRouter = createTRPCRouter({
   getQuestions: publicProcedure
     .input(
       z
-        .object({ take: z.number(), cursorId: z.string().optional() })
+        .object({}) // { take: z.number(), cursorId: z.string().optional() }
         .optional(),
     )
-    .query(async ({ input, ctx }) => {
-      const take = input?.take ?? 20;
-      const cursorId = input?.cursorId;
+    .query(async ({ ctx }) => {
+      // const take = input?.take ?? 20;
+      // const cursorId = input?.cursorId;
 
       const questions = await ctx.db.question.findMany({
-        take: take + 1,
-        ...(cursorId ? { cursor: { id: cursorId }, skip: 1 } : {}),
+        // take: take + 1,
+        // ...(cursorId ? { cursor: { id: cursorId }, skip: 1 } : {}),
         orderBy: { createdAt: "desc" },
         select: {
           id: true,
@@ -49,12 +49,9 @@ export const questionRouter = createTRPCRouter({
         },
       });
 
-      const hasMore = questions.length > take;
-      if (hasMore) questions.pop();
-
+      
       return {
-        items: questions,
-        hasMore,
+        items: questions
       };
     }),
 

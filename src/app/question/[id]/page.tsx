@@ -12,6 +12,7 @@ import {
 import Form from "~/app/_components/Form";
 import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
+import { Loader } from "~/app/_components/Loader";
 
 export default function QuestionPage() {
   const router = useRouter();
@@ -43,7 +44,12 @@ export default function QuestionPage() {
     });
   };
 
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading)
+    return (
+      <div className="flex h-[100vh] w-[100vw] items-center justify-center">
+        <Loader className="w-[2rem] h-[2rem]" /> <p className="text-[1.5rem] ml-2">Loading...</p>
+      </div>  
+    );
 
   return (
     <div className="mx-auto mt-8 w-[90%] space-y-6 text-black">

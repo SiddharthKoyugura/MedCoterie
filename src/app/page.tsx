@@ -6,6 +6,7 @@ import Form from "./_components/Form";
 import { useEffect, useState, type ChangeEvent } from "react";
 import { toast } from "sonner";
 import { Input } from "~/components/ui/input";
+import { Loader } from "lucide-react";
 
 type QuestionProp = {
   id: string;
@@ -16,7 +17,7 @@ type QuestionProp = {
 };
 
 export default function Home() {
-  const { data, isLoading } = api.question.getQuestions.useQuery({ take: 10 });
+  const { data, isLoading } = api.question.getQuestions.useQuery();
 
   const [questions, setQuestions] = useState<QuestionProp[]>();
   const [searchText, setSearchText] = useState<string>("");
@@ -53,9 +54,9 @@ export default function Home() {
     return;
   };
 
-  const { data: searchData } = api.question.getQuestionsByTitle.useQuery(
-    { text: searchText },
-  );
+  const { data: searchData } = api.question.getQuestionsByTitle.useQuery({
+    text: searchText,
+  });
 
   useEffect(() => {
     if (searchData) {
@@ -73,7 +74,12 @@ export default function Home() {
     }
   }, [data]);
 
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading)
+    return (
+      <div className="flex h-[100vh] w-[100vw] items-center justify-center">
+        <Loader className="w-[2rem] h-[2rem]" /> <p className="text-[1.5rem] ml-2">Loading...</p>
+      </div>  
+    );
 
   // setQuestions(data?.items);
 
