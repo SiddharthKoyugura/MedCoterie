@@ -1,5 +1,5 @@
 "use client";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { api } from "~/trpc/react";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { useState } from "react";
@@ -11,8 +11,12 @@ import {
 } from "~/components/ui/accordion";
 import Form from "~/app/_components/Form";
 import { toast } from "sonner";
+import { Button } from "~/components/ui/button";
+
 
 export default function QuestionPage() {
+  const router = useRouter();
+
   const [text, setText] = useState<string>("");
   const [authorName, setAuthorName] = useState<string>("");
 
@@ -36,29 +40,37 @@ export default function QuestionPage() {
     saveAnswerMutate.mutate({
       text,
       authorName,
-      questionId: id
-    })
+      questionId: id,
+    });
   };
 
   if (isLoading) return <p>Loading...</p>;
 
   return (
     <div className="mx-auto mt-8 w-[90%] space-y-6 text-black">
+      <div className="flex justify-end">
+        <Button className="cursor-pointer" onClick={() => router.push("/")}>Back</Button>
+      </div>
+
       {/* Question */}
       <Card className="border border-black bg-white shadow-md">
         <CardHeader>
-          <CardTitle className=" text-sm font-semibold lg:text-lg">{data?.text}</CardTitle>
+          <CardTitle className="text-sm font-semibold lg:text-lg">
+            {data?.text}
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex items-end justify-between">
             <div className="self-end">
-              <p className=" font-medium mb-2 text-sm text-blue-600">
+              <p className="mb-2 text-sm font-medium text-blue-600">
                 {data?.answers.length} Answers
               </p>
               <Form
                 openDialogText="Submit an Answer"
                 formName="Answer"
+                text={text}
                 setText={setText}
+                authorName={authorName}
                 setAuthorName={setAuthorName}
                 handleSubmit={handleSubmit}
               />
