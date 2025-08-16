@@ -20,7 +20,7 @@ export default function Home() {
   const { data, isLoading } = api.question.getQuestions.useQuery();
 
   const [questions, setQuestions] = useState<QuestionProp[]>();
-  const [searchText, setSearchText] = useState<string>("");
+  // const [searchText, setSearchText] = useState<string>("");
 
   // const {searchData, loading} = api.question.getQuestionsByTitle.useQuery();
 
@@ -54,18 +54,26 @@ export default function Home() {
     return;
   };
 
-  const { data: searchData } = api.question.getQuestionsByTitle.useQuery({
-    text: searchText,
-  });
+  // const { data: searchData } = api.question.getQuestionsByTitle.useQuery({
+  //   text: searchText,
+  // });
 
-  useEffect(() => {
-    if (searchData) {
-      setQuestions(searchData);
-    }
-  }, [searchData]);
+  // useEffect(() => {
+  //   if (searchData) {
+  //     setQuestions(searchData);
+  //   }
+  // }, [searchData]);
 
   const handleSearch = (text: string) => {
-    setSearchText(text);
+    // setSearchText(text);
+    if(text.length > 0) {
+      const filteredItems = data?.items.filter((item) =>
+        item.text.toLowerCase().includes(text.toLowerCase()),
+      );
+      setQuestions(filteredItems);
+    }else {
+      setQuestions(data?.items);
+    }
   };
 
   useEffect(() => {
@@ -77,8 +85,9 @@ export default function Home() {
   if (isLoading)
     return (
       <div className="flex h-[100vh] w-[100vw] items-center justify-center">
-        <Loader className="w-[2rem] h-[2rem]" /> <p className="text-[1.5rem] ml-2">Loading...</p>
-      </div>  
+        <Loader className="h-[2rem] w-[2rem]" />{" "}
+        <p className="ml-2 text-[1.5rem]">Loading...</p>
+      </div>
     );
 
   // setQuestions(data?.items);
