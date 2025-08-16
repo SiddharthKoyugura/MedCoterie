@@ -3,14 +3,14 @@ import { useParams } from "next/navigation";
 import { api } from "~/trpc/react";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { useState } from "react";
-import { Input } from "~/components/ui/input";
-import { Button } from "~/components/ui/button";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "~/components/ui/accordion";
+import Form from "~/app/_components/Form";
+import { toast } from "sonner";
 
 export default function QuestionPage() {
   const [text, setText] = useState<string>("");
@@ -18,6 +18,27 @@ export default function QuestionPage() {
 
   const { id } = useParams<{ id: string }>();
   const { data, isLoading } = api.question.getQuestionById.useQuery({ id });
+
+  const saveAnswerMutate = api.answer.saveAnswer.useMutation({
+    onSuccess: (answer) => {
+      toast.success("Answer Submitted Succesfully!");
+      setText("");
+      setAuthorName("");
+
+      data?.answers.push(answer);
+    },
+    onError: (err) => {
+      toast.error("Failed to Submit an answer");
+    },
+  });
+
+  const handleSubmit = () => {
+    saveAnswerMutate.mutate({
+      text,
+      authorName,
+      questionId: id
+    })
+  };
 
   if (isLoading) return <p>Loading...</p>;
 
@@ -29,13 +50,21 @@ export default function QuestionPage() {
           <CardTitle className="text-xl font-bold">{data?.text}</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="flex justify-between">
-            <div className="">
+          <div className="flex items-end justify-between">
+            <div className="self-end">
               <p className="mt-2 text-sm font-medium">
                 {data?.answers.length} Answers
               </p>
+              <Form
+                openDialogText="Submit an Answer"
+                formName="Answer"
+                setText={setText}
+                setAuthorName={setAuthorName}
+                handleSubmit={handleSubmit}
+              />
             </div>
-            <div className="">
+
+            <div className="self-end text-right">
               <p className="text-sm text-gray-600">By {data?.authorName}</p>
               <p className="text-xs text-gray-500">
                 {data?.createdAt
