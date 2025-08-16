@@ -74,7 +74,6 @@ export default function Home() {
   }, [data]);
 
   if (isLoading) return <p>Loading...</p>;
-  if (!data) return <p>No questions yet.</p>;
 
   // setQuestions(data?.items);
 
