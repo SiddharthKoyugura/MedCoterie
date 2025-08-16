@@ -27,7 +27,7 @@ export default function QuestionPage() {
 
       data?.answers.push(answer);
     },
-    onError: (err) => {
+    onError: () => {
       toast.error("Failed to Submit an answer");
     },
   });
@@ -47,12 +47,12 @@ export default function QuestionPage() {
       {/* Question */}
       <Card className="border border-black bg-white shadow-md">
         <CardHeader>
-          <CardTitle className="text-xl font-bold">{data?.text}</CardTitle>
+          <CardTitle className=" text-sm font-semibold lg:text-lg">{data?.text}</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex items-end justify-between">
             <div className="self-end">
-              <p className="mt-2 text-sm font-medium">
+              <p className=" font-medium mb-2 text-sm text-blue-600">
                 {data?.answers.length} Answers
               </p>
               <Form
@@ -90,7 +90,7 @@ export default function QuestionPage() {
               collapsible
             >
               <AccordionItem value="item-1">
-                <AccordionTrigger className="cursor-pointer text-xl">
+                <AccordionTrigger className="cursor-pointer text-sm font-semibold lg:text-lg">
                   {ans.text.slice(0, 50)}...
                 </AccordionTrigger>
                 <AccordionContent>{ans.text}</AccordionContent>
@@ -99,41 +99,6 @@ export default function QuestionPage() {
           ))
         )}
       </div>
-
-      {/* Submit Answer */}
-      {/* <Card className="border border-black bg-white shadow-md">
-        <CardHeader>
-          <CardTitle className="text-lg font-semibold">Submit Answer</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-3">
-          <Input
-            placeholder="Your name"
-            value={authorName}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setAuthorName(e.target.value)
-            }
-            className="border border-black"
-          />
-          <Input
-            placeholder="Type your answer..."
-            value={text}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setText(e.target.value)
-            }
-            className="border border-black"
-          />
-          <Button
-            onClick={
-              () => null
-              //   saveAnswer.mutate({ text, authorName, questionId: data?.id })
-            }
-            disabled={!text || !authorName}
-            className="w-full border border-black bg-black text-white transition hover:bg-white hover:text-black"
-          >
-            Submit
-          </Button>
-        </CardContent>
-      </Card> */}
     </div>
   );
 }
